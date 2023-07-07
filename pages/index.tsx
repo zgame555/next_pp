@@ -4,7 +4,7 @@ type Props = {};
 
 export default function index({}: Props) {
   const [images, setImages] = React.useState<string>();
-  const [url, setUrl] = React.useState<string>("");
+  const [url, setUrl] = React.useState<string>("https://mantine.dev/guides/next/");
   const handleFetch = async () => {
     const query = "?url=" + url;
     fetch("/api/hello" + query).then((res) => {

@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "chrome-aws-lambda";
 
 type Data = {
   name: string;
@@ -16,10 +17,14 @@ export default async function handler(
     return res.status(400).json({ error: "URL parameter is required" });
   }
 
-  let browser;
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath,
+    headless: true,
+    channel: "chrome",
+  });
 
   try {
-    browser = await puppeteer.launch({ headless: "new" });
     const page = await browser.newPage();
     await page.goto(String(url));
 
